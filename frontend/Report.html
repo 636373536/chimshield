@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>chimshield-home</title>
+    <link rel="icon"type="image/png" href="https://i.postimg.cc/T2kMz4kS/logo.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4895ef;
+            --danger: #f72585;
+            --success: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .user-actions {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://i.postimg.cc/MG0gdPM9/R-2.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 5rem 2rem;
+            text-align: center;
+        }
+        
+        .hero-content {
+            
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 4rem;
+            margin-top: 2rem;
+    
+        }
+        
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 5rem;
+            margin-top: 2rem;
+        }
+        
+        .search-box {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            max-width: 800px;
+            margin: -2rem auto 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 10;
+        }
+        
+        .search-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group label {
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+        
+        .section-title p {
+            color: #6c757d;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+        
+        .feature-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-card h3 {
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+        
+        .teams {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+        
+        .team-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        
+        .team-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .team-img {
+            height: 200px;
+            width: 100%;
+            object-fit: cover;
+        }
+        
+        .team-info {
+            padding: 1.5rem;
+        }
+        
+        .team-info h3 {
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .team-rating {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            color: #ffc107;
+        }
+        
+        .team-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .report-incident {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 4rem;
+        }
+        
+        .report-form {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #d1145a;
+        }
+        
+        .contact-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+        
+        .contact-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+        .logout{
+            background-color: #e74c3c;
+            color: white;
+            width: 60px;
+            height: fit-content;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .logout:hover {
+            background-color: #f5f1f0;
+        }
+        
+        .contact-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+        
+        .social-links a:hover {
+            color: var(--accent);
+        }
+        
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            
+            .nav-links {
+                gap: 1rem;
+            }
+            
+            .hero {
+                padding: 3rem 1rem;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .search-box {
+                margin: -1rem auto 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <a href="#" class="logo">Chim-Shield</a>
+            <div class="nav-links">
+                <a href="#">Home</a>
+                <a href="#teams">Teams</a>
+                <a href="#report">Report</a>
+                <a href="#contact">Contact</a>
+                <a href="./trial.html" class="logout" >Logout</a>
+            </div>
+
+        </nav>
+    </header>
+    
+    <section class="hero">
+        <div class="video-section">
+            <video autoplay loop muted>
+                <source src="/Users/MTENJE/Downloads/3129957-uhd_3840_2160_25fps.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        <div class="hero-content">
+            <h1>Book Professional Teams for Your Events</h1>
+            <p>Find the perfect team for any occasion and manage everything in one place</p>
+          </div>
+         </div>
+    </section>
+    
+    <div class="search-box">
+        <form class="search-form">
+            <div class="form-group">
+                <label for="event-type">Event Type</label>
+                <select id="event-type" class="form-control">
+                    <option value="">Select event type</option>
+                    <option value="wedding">Wedding</option>
+                    <option value="corporate">Residential buildings</option>
+                    <option value="birthday">Birthday</option>
+                    <option value="bars">Bars</option>
+                    <option value="concert">Concert</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="location">Location</label>
+                <input type="text" id="location" class="form-control" placeholder="Enter location">
+            </div>
+            <div class="form-group">
+                <label for="date">Date</label>
+                <input type="date" id="date" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="guests">Number of Guests</label>
+                <input type="number" id="guests" class="form-control" placeholder="e.g. 100">
+            </div>
+            <button type="submit" class="btn btn-primary" style="align-self: flex-end;">Book Teams</button>
+        </form>
+    </div>
+    
+    <div class="container">
+        <section id="features">
+            <div class="section-title">
+                <h2>Why Choose CHIM-SHIELD </h2>
+                <p>We provide comprehensive solutions for all your event management needs</p>
+            </div>
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h3>Easy Booking</h3>
+                    <p>Book professional teams with just a few clicks. Manage all your events in one place.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h3>Incident Reporting</h3>
+                    <p>Report any issues during your event through multiple channels including messaging and calls.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3>Team Ratings</h3>
+                    <p>Rate and review teams after your event to help others make informed decisions.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="teams">
+            <div class="section-title">
+                <h2>Available Teams</h2>
+                <p>Browse through our professional teams ready for your next event</p>
+            </div>
+            <div class="teams">
+                <div class="team-card">
+                    <img src="https://i.postimg.cc/kG5rVQ5f/01.jpg" alt="Event Team" class="team-img">
+                    <div class="team-info">
+                        <h3>VIPs Services</h3>
+                        <div class="team-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span>4.7 (128)</span>
+                        </div>
+                        <div class="team-meta">
+                            <span><i class="fas fa-map-marker-alt"></i> Lilongwe,Blantyre,Mzuzu</span>
+                            <span> k180,000/day</span>
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%;">Book Now</button>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <img src="https://i.postimg.cc/Rhh8CvPY/07.png" alt="Corporate Team" class="team-img">
+                    <div class="team-info">
+                        <h3>Residential buildings </h3>
+                        <div class="team-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span>5.0 (89)</span>
+                        </div>
+                        <div class="team-meta">
+                            <span><i class="fas fa-map-marker-alt"></i> Lilongwe,Blantyre,Mzuzu</span>
+                            <span> k100,000/day</span>
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%;">Book Now</button>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <img src="https://i.postimg.cc/Ssy356ck/06.png" alt="Wedding Team" class="team-img">
+                    <div class="team-info">
+                        <h3>Wedding Specialists</h3>
+                        <div class="team-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <span>4.2 (215)</span>
+                        </div>
+                        <div class="team-meta">
+                            <span><i class="fas fa-map-marker-alt"></i>Lilongwe,Blantyre,Mzuzu</span>
+                            <span> k150,000/day</span>
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%;">Book Now</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="report">
+            <div class="section-title">
+                <h2>Report an Incident</h2>
+                <p>Let us know if you experienced any issues during your event</p>
+            </div>
+            <div class="report-incident">
+                <form class="report-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="booking-id">Booking ID</label>
+                            <input type="text" id="booking-id" class="form-control" placeholder="Enter your booking ID">
+                        </div>
+                        <div class="form-group">
+                            <label for="incident-type">Incident Type</label>
+                            <select id="incident-type" class="form-control">
+                                <option value="">Select incident type</option>
+                                <option value="safety">Safety Concern</option>
+                                <option value="service">Poor Service</option>
+                                <option value="behavior">Unprofessional Behavior</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="incident-details">Incident Details</label>
+                        <textarea id="incident-details" class="form-control" rows="5" placeholder="Please describe the incident in detail"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="evidence">Upload Evidence (Optional)</label>
+                        <input type="file" id="evidence" class="form-control">
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline">Cancel</button>
+                        <button type="submit" class="btn btn-danger">Submit Report</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+        
+        <section id="contact">
+            <div class="section-title">
+                <h2>Contact Support</h2>
+                <p>Reach out to us through multiple channels for any questions or urgent matters</p>
+            </div>
+            <div class="contact-methods">
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-comment-dots"></i>
+                    </div>
+                    <h3>Live Chat</h3>
+                    <p>Chat with our support team in real-time for immediate assistance.</p>
+                    <button onclick="window.location.href='./chats.html'" class="btn btn-primary">Start Chat</button>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+                    <h3>Phone Call</h3>
+                    <p>Call our 24/7 support line for urgent matters.</p>
+                    <button onclick="window.location.href='./chats.html'" class="btn btn-primary">Call Now</button>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h3>Email</h3>
+                    <p>Send us an email and we'll respond within 24 hours.</p>
+                    <button onclick="window.location.href='mailto: cshield@gmail.com'"  class="btn btn-primary">Send Email</button>
+                </div>
+            </div>
+        </section>
+        
+        <section id="rating">
+            <div class="section-title">
+                <h2>Rate Your Experience</h2>
+                <p>Help us improve by rating the team you booked</p>
+            </div>
+            <div class="report-incident">
+                <form class="report-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="rating-booking-id">Booking ID</label>
+                            <input type="text" id="rating-booking-id" class="form-control" placeholder="Enter your booking ID">
+                        </div>
+                        <div class="form-group">
+                            <label>Overall Rating</label>
+                            <div style="display: flex; gap: 10px; font-size: 1.5rem; color: #ffc107;">
+                                <i class="far fa-star" data-rating="1"></i>
+                                <i class="far fa-star" data-rating="2"></i>
+                                <i class="far fa-star" data-rating="3"></i>
+                                <i class="far fa-star" data-rating="4"></i>
+                                <i class="far fa-star" data-rating="5"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="rating-comments">Comments</label>
+                        <textarea id="rating-comments" class="form-control" rows="5" placeholder="Tell us about your experience"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Submit Rating</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+    
+    <footer>
+        <div class="footer-links">
+            <a href="#">About Us</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">FAQ</a>
+        </div>
+        <div class="social-links">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+        <p>&copy; 2025 Chim-Shield. All rights reserved.</p>
+    </footer>    
+    <script>
+        // Simple star rating functionality
+        document.querySelectorAll('[data-rating]').forEach(star => {
+            star.addEventListener('click', function() {
+                const rating = parseInt(this.getAttribute('data-rating'));
+                const stars = document.querySelectorAll('[data-rating]');
+                
+                stars.forEach((s, index) => {
+                    if (index < rating) {
+                        s.classList.remove('far');
+                        s.classList.add('fas');
+                    } else {
+                        s.classList.remove('fas');
+                        s.classList.add('far');
+                    }
+                });
+            });
+        });
+
+        // --- Booking and Search Logic ---
+        document.addEventListener("DOMContentLoaded", function() {
+            // Simulate user ID (in real app, get from auth/session)
+            const userId = "user_" + Math.floor(Math.random() * 100000);
+
+            // Sample team data
+            const teams = [
+                {
+                    id: 1,
+                    name: "VIPs Services",
+                    type: "vip",
+                    location: "Lilongwe,Blantyre,Mzuzu",
+                    price: 80000,
+                    rating: 4.7
+                },
+                {
+                    id: 2,
+                    name: "Residential buildings",
+                    type: "corporate",
+                    location: "Lilongwe,Blantyre,Mzuzu",
+                    price: 100000,
+                    rating: 5.0
+                },
+                {
+                    id: 3,
+                    name: "Wedding Specialists",
+                    type: "wedding",
+                    location: "Lilongwe,Blantyre,Mzuzu",
+                    price: 150000,
+                    rating: 4.2
+                }
+            ];
+
+            let currentBookingId = null;
+            const searchForm = document.querySelector(".search-form");
+
+            searchForm.addEventListener("submit", function(e) {
+                e.preventDefault();
+                currentBookingId = "BK" + Math.floor(100000 + Math.random() * 900000);
+
+                const eventType = document.getElementById("event-type").value;
+                const location = document.getElementById("location").value.toLowerCase();
+
+                let filteredTeams = teams;
+                if (eventType) {
+                    filteredTeams = filteredTeams.filter(team =>
+                        team.type === eventType ||
+                        (eventType === "corporate" && team.name === "Residential buildings")
+                    );
+                }
+                if (location) {
+                    filteredTeams = filteredTeams.filter(team =>
+                        team.location.toLowerCase().includes(location)
+                    );
+                }
+                displaySearchResults(filteredTeams, currentBookingId);
+            });
+
+            function displaySearchResults(results, bookingId) {
+                const resultsContainer = document.createElement("div");
+                resultsContainer.className = "search-results";
+                resultsContainer.innerHTML = `
+                    <h3>Available Teams (${results.length})</h3>
+                    ${results.map(team => `
+                        <div class="team-result">
+                            <h4>${team.name}</h4>
+                            <p>Location: ${team.location}</p>
+                            <p>Price: K${team.price.toLocaleString()}/day</p>
+                            <p>Rating: ${team.rating}/5</p>
+                            <button class="btn btn-primary book-btn" data-id="${team.id}" data-bookingid="${bookingId}">Book Now</button>
+                        </div>
+                    `).join("")}
+                `;
+                const oldResults = document.querySelector(".search-results");
+                if (oldResults) oldResults.remove();
+                searchForm.parentNode.insertAdjacentElement("afterend", resultsContainer);
+
+                document.querySelectorAll(".book-btn").forEach(btn => {
+                    btn.addEventListener("click", function() {
+                        const teamId = parseInt(this.getAttribute("data-id"));
+                        const team = teams.find(t => t.id === teamId);
+                        bookTeam(team);
+                    });
+                });
+            }
+
+            function bookTeam(team) {
+                const bookingId = currentBookingId || ("BK" + Math.floor(100000 + Math.random() * 900000));
+                document.getElementById("booking-id").value = bookingId;
+
+                // Notify admin via backend or WebSocket (pseudo code, replace with real API/WebSocket)
+                if (window.WebSocket) {
+                    try {
+                        const ws = new WebSocket("ws://localhost:3000/user");
+                        ws.onopen = function() {
+                            ws.send(JSON.stringify({
+                                type: "new-booking",
+                                booking: {
+                                    id: bookingId,
+                                    teamId: team.id,
+                                    teamName: team.name,
+                                    userId: userId,
+                                    timestamp: new Date().toISOString()
+                                }
+                            }));
+                            ws.close();
+                        };
+                    } catch (e) {
+                        // fallback or ignore if no backend
+                    }
+                }
+                // In a real app, you would POST to /api/bookings here
+
+                alert(`Booking confirmed for ${team.name}\nBooking ID: ${bookingId}\nPrice: K${team.price.toLocaleString()}/day`);
+                document.getElementById("report").scrollIntoView({ behavior: "smooth" });
+            }
+        });
+
+        // --- Chat Integration ---
+        // To enable admin notification for messages:
+        // - In chats.html, send messages to your backend (WebSocket or HTTP).
+        // - In the admin panel, listen for new messages (WebSocket recommended).
+        // - When a new message arrives, display it under "message from customer" and show a notification.
+    </script>
+</body>
+</html>

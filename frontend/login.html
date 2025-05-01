@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="icon"type="image/png" href="C:/Users/MTENJE/Desktop/Pins/logo.jpg">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('C:/Users/MTENJE/Desktop/Pins/R.jpg'); /* Replace 'your-image.jpg' with the actual path to your image */
+            background-size: fill;
+            background-position: fill;
+            display: flex;
+           
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            filter: contrast(90%);
+        }
+        .top-section{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .create{
+            font-size: 50px;
+            color:#02034d;
+            font-family: serif;
+            font-weight: bold;
+            text-align: row;
+            margin-bottom: -120px;
+            margin-left: 50px;
+            margin-right: 340px;
+            margin-top:80px; ;
+            
+
+        }
+        .top-image{
+            
+            width: 100px;
+            height: 100px;
+            border-radius: 168px;
+            /*margin-left: 70px;
+            margin-bottom: 0px;
+            margin-right: 350px;
+            margin-top: 10px;*/
+
+            flex-direction: column;
+            
+            animation: bounce 6s infinite ;
+            
+            
+
+        }
+        .top-image:hover{
+            top: -100px;
+            left: 50%;
+            transform: translateY(-50%);
+        }@keyframes bounceHorizontal{
+            0%, 100%{ top: -100px;}
+            50%{top: (-300px);}
+
+        }
+        
+        .signup-container {
+            background-image: url('C:/Users/MTENJE/Desktop/Pins/logo.jpg');
+            padding: 20px;
+            border-radius: 30px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 600px;
+            height: auto;
+            text-align: center;
+            position: center;
+            flex-direction: column;
+            
+        }
+        .signup-container::before{
+            content: "";
+            position:absolute;
+            background: rgba(0, 0, 0, 1);
+            z-index: 1;
+        }
+        .signup-container h2 {
+            color: #fff;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .signup-container input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 30px;
+        }
+        .signup-container button {
+            width: 30%;
+            position: sticky;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 60px;
+            cursor: pointer;
+            margin-left: 200px;
+            margin-right: 400px;
+        }
+        .signup-container button:hover {
+            background-color: #1a1131;
+        }
+        .sign_up{
+            margin-top: 100px;
+            color: #fff;
+        }
+        .sign_up:hover{
+            color:burlywood;
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body> 
+    <div class="top-section">
+   
+    <img src="C:/Users/MTENJE/Desktop/Pins/logo.jpg" alt="Logo" class="top-image">
+    <div class="signup-container">
+        <h2>Login</h2>
+        <form action="/submit_login" method="post">
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">login</button>
+            
+        </form>
+        <a href="sign_up.html" class="sign_up">Don't have an account?</a>
+    </div>
+</body>
+</html>

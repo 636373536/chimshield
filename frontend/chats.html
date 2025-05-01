@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>chimshield-talk-to-us</title>
+    <link rel="icon"type="image/png" href="https://i.postimg.cc/T2kMz4kS/logo.jpg">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: #979696;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .messaging-panel {
+            width: 800px;
+            height: 90vh;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .chat-header {
+            background: rgb(3, 13, 48);
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .icon-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .call-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: none;
+        }
+        
+        .call-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .call-accept {
+            background: #2ecc71;
+            color: white;
+        }
+        
+        .call-reject {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .messages-container {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #948d86;
+            background-image: url('https://web.whatsapp.com/img/bg-chat-tile-light_a4be512e7195b6b733d9110b408f075d.png');
+        }
+        
+        .message {
+            max-width: 70%;
+            padding: 8px 12px;
+            border-radius: 7.5px;
+            margin-bottom: 10px;
+            position: relative;
+            word-wrap: break-word;
+        }
+        
+        .received {
+            background: white;
+            align-self: flex-start;
+        }
+        
+        .sent {
+            background: #dcf8c6;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+        
+        .time {
+            font-size: 11px;
+            color: #666;
+            display: block;
+            text-align: right;
+            margin-top: 5px;
+        }
+        
+        .read {
+            color: #4fc3f7;
+        }
+        
+        .input-area {
+            display: flex;
+            padding: 10px;
+            background:#0e0e35;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .message-input {
+            flex: 1;
+            background: white;
+            border-radius: 20px;
+            padding: 10px 15px;
+            max-height: 100px;
+            overflow-y: auto;
+            outline: none;
+        }
+        
+        .send-btn {
+            background: #075e54;
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .attachment-menu {
+            position: relative;
+        }
+        
+        .dropdown-menu {
+            position: absolute;
+            bottom: 50px;
+            left: 0;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            padding: 10px;
+            display: none;
+        }
+        
+        .dropdown-menu.show {
+            display: block;
+        }
+        
+        .dropdown-item {
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+        
+        .dropdown-item:hover {
+            background: #f5f5f5;
+        }
+        
+        .call-container {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            z-index: 100;
+            color: white;
+        }
+        
+        .call-controls {
+            position: absolute;
+            bottom: 30px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .call-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .end-call {
+            background: #f44336;
+        }
+        
+        .video-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .remote-video {
+            flex: 1;
+            background: #333;
+        }
+        
+        .local-video {
+            position: absolute;
+            bottom: 100px;
+            right: 20px;
+            width: 150px;
+            height: 200px;
+            background: #555;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="messaging-panel">
+        <!-- Header with call buttons -->
+        <div class="chat-header">
+            <div class="user-info">
+                <img src="https://i.postimg.cc/T2kMz4kS/logo.jpg" alt="Profile" class="profile-pic">
+                <div>
+                    <!-- Always show "Admin" as chat partner for users -->
+                    <h3 id="chatPartnerName">Admin</h3>
+                    <p class="status">Online</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="icon-btn call-btn" onclick="startVoiceCall()">
+                    <i class="fas fa-phone"></i>
+                </button>
+                <button class="icon-btn call-btn" onclick="startVideoCall()">
+                    <i class="fas fa-video"></i>
+                </button>
+                <button class="icon-btn"><i class="fas fa-ellipsis-v"></i></button>
+            </div>
+        </div>
+        
+        <!-- Messages Area -->
+        <div class="messages-container" id="messagesContainer">
+            <!-- Messages will be dynamically inserted here -->
+        </div>
+        <div class="call-notification" id="callNotification">
+            <div id="callNotificationText">Incoming call</div>
+            <div class="call-buttons">
+                <button class="btn call-accept" id="acceptCallBtn">Accept</button>
+                <button class="btn call-reject" id="rejectCallBtn">Reject</button>
+            </div>
+        </div>
+        
+        
+        <!-- Input Area -->
+        <div class="input-area">
+            <div class="attachment-menu">
+                <button class="icon-btn" onclick="toggleAttachmentMenu()">
+                    <i class="fas fa-paperclip"></i>
+                </button>
+                <div class="dropdown-menu" id="attachmentMenu">
+                    <div class="dropdown-item" onclick="attachFile('image')">
+                        <i class="fas fa-image"></i> Photo
+                    </div>
+                    <div class="dropdown-item" onclick="attachFile('video')">
+                        <i class="fas fa-video"></i> Video
+                    </div>
+                    <div class="dropdown-item" onclick="attachFile('document')">
+                        <i class="fas fa-file"></i> Document
+                    </div>
+                    <div class="dropdown-item" onclick="attachLocation()">
+                        <i class="fas fa-map-marker-alt"></i> Location
+                    </div>
+                    <div class="dropdown-item" onclick="startRecording()">
+                        <i class="fas fa-microphone"></i> Record Audio
+                    </div>
+                </div>
+            </div>
+            
+            <div class="message-input" id="messageInput" contenteditable="true" placeholder="Type a message"></div>
+            
+            <button class="icon-btn" id="recordBtn" onclick="startRecording()">
+                <i class="fas fa-microphone"></i>
+            </button>
+            
+            <button class="send-btn" onclick="sendMessage()">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Call Container (hidden by default) -->
+    <div class="call-container" id="callContainer">
+        <div class="video-container" id="videoContainer">
+            <video class="remote-video" id="remoteVideo" autoplay></video>
+            <video class="local-video" id="localVideo" autoplay muted></video>
+        </div>
+        <div class="call-controls">
+            <button class="call-btn" onclick="toggleMute()">
+                <i class="fas fa-microphone"></i>
+            </button>
+            <button class="call-btn" onclick="toggleVideo()">
+                <i class="fas fa-video"></i>
+            </button>
+            <button class="call-btn end-call" onclick="endCall()">
+                <i class="fas fa-phone"></i>
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        // Frontend functionality
+        function toggleAttachmentMenu() {
+            const menu = document.getElementById('attachmentMenu');
+            menu.classList.toggle('show');
+        }
+        
+        function attachFile(type) {
+            const input = document.createElement('input');
+            input.type = 'file';
+            
+            if (type === 'image') {
+                input.accept = 'image/*';
+            } else if (type === 'video') {
+                input.accept = 'video/*';
+            } else {
+                input.accept = '*';
+            }
+            
+            input.onchange = (e) => {
+                // handle file selection here
+            };
+            input.click();
+        }
+        
+        // WebSocket connection
+        const socket = new WebSocket('ws://localhost:3000');
+        let userId = null;
+        
+        // Set chat mode: 'user' or 'admin'
+        const chatMode = 'user'; // Change to 'admin' for admin panel
+
+        // For admin, set the target userId (e.g., from URL or selection)
+        let targetUserId = null;
+        if (chatMode === 'admin') {
+            // Example: get userId from URL query or selection
+            const params = new URLSearchParams(window.location.search);
+            targetUserId = params.get('userId');
+        }
+
+        // Connection opened
+        socket.addEventListener('open', (event) => {
+            console.log('Connected to WebSocket server');
+            
+            // Generate or get user ID
+            userId = localStorage.getItem('userId') || generateUserId();
+            localStorage.setItem('userId', userId);
+            
+            // Send user identification
+            socket.send(JSON.stringify({
+                type: 'identify',
+                userId: userId
+            }));
+        });
+        
+        // Listen for messages
+        socket.addEventListener('message', (event) => {
+            const data = JSON.parse(event.data);
+            
+            if (data.type === 'message') {
+                addMessage('received', data.content, new Date(data.timestamp));
+            } else if (data.type === 'call') {
+                showCallNotification(data);
+            }
+        });
+        
+        function showCallNotification(callData) {
+            const notification = document.getElementById('callNotification');
+            const text = document.getElementById('callNotificationText');
+            
+            text.textContent = `Incoming ${callData.callType} call from admin`;
+            notification.style.display = 'block';
+            
+            document.getElementById('acceptCallBtn').onclick = () => {
+                notification.style.display = 'none';
+                
+                // Send call acceptance
+                socket.send(JSON.stringify({
+                    type: 'call-response',
+                    accepted: true,
+                    callType: callData.callType
+                }));
+                
+                // Start the call
+                if (callData.callType === 'video') {
+                    startVideoCall(true);
+                } else {
+                    startVoiceCall(true);
+                }
+            };
+            
+            document.getElementById('rejectCallBtn').onclick = () => {
+                notification.style.display = 'none';
+                
+                // Send call rejection
+                socket.send(JSON.stringify({
+                    type: 'call-response',
+                    accepted: false
+                }));
+            };
+        }
+        
+        // Modify sendMessage to use WebSocket and set recipient
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const text = input.innerText.trim();
+            
+            if (text) {
+                const message = {
+                    type: 'message',
+                    content: text,
+                    timestamp: new Date().toISOString(),
+                    sender: chatMode,
+                    userId: userId,
+                    to: chatMode === 'user' ? 'admin' : targetUserId // always send to admin if user, or to user if admin
+                };
+                
+                socket.send(JSON.stringify(message));
+                addMessage('sent', text, new Date());
+                input.innerText = '';
+            }
+        }
+        
+        // Modify call functions to use WebSocket and set recipient
+        function startVoiceCall(incoming = false) {
+            if (!incoming) {
+                const callData = {
+                    type: 'call',
+                    callType: 'voice',
+                    initiator: chatMode,
+                    userId: userId,
+                    to: chatMode === 'user' ? 'admin' : targetUserId
+                };
+                socket.send(JSON.stringify(callData));
+            }
+            // Rest of your call initialization code...
+        }
+        
+        function startVideoCall(incoming = false) {
+            if (!incoming) {
+                const callData = {
+                    type: 'call',
+                    callType: 'video',
+                    initiator: chatMode,
+                    userId: userId,
+                    to: chatMode === 'user' ? 'admin' : targetUserId
+                };
+                socket.send(JSON.stringify(callData));
+            }
+            // Rest of your call initialization code...
+        }
+
+        // Example for sending audio record (pseudo-code, you need to implement actual recording logic)
+        function sendAudioRecord(audioBlob) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                const audioData = reader.result;
+                const audioMsg = {
+                    type: 'audio',
+                    content: audioData,
+                    timestamp: new Date().toISOString(),
+                    sender: chatMode,
+                    userId: userId,
+                    to: chatMode === 'user' ? 'admin' : targetUserId
+                };
+                socket.send(JSON.stringify(audioMsg));
+                addMessage('sent', '[Audio message]', new Date());
+            };
+            reader.readAsDataURL(audioBlob);
+        }
+
+        function generateUserId() {
+            return 'user_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        // Add this function to display messages in the chat
+        function addMessage(type, content, timestamp) {
+            const container = document.getElementById('messagesContainer');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'message ' + type;
+            msgDiv.innerHTML = `
+                <div>${content}</div>
+                <span class="time">${timestamp ? new Date(timestamp).toLocaleTimeString() : ''}</span>
+            `;
+            container.appendChild(msgDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // If you want to dynamically set the chat partner name for admin, you can do:
+        // (But for users, always show "Admin")
+        document.addEventListener('DOMContentLoaded', function() {
+            // For user chat, always show "Admin"
+            document.getElementById('chatPartnerName').textContent = "Admin";
+        });
+    
+    </script>
+
+</body>
+
+</html>

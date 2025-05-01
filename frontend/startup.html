@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to CHIM-SHIELD</title>
+    <link rel="icon" type="image/png" href="C:/Users/MTENJE/Desktop/Pins/logo.jpg">
+    <style>
+        /* General body styling */
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            color: white;
+            text-align: center;
+            background: 
+                linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.6)), 
+                url('C:/Users/MTENJE/Desktop/Pins/startup.jpg') no-repeat center center;
+                background-size: 100% ; /* Split the background equally */
+                background-position:initial; /* Gradient on the left, image on the right */
+        }
+
+        /* Header text styling */
+        .headers {
+            font-size: 64px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        /* Subtitle styling */
+        .in-text {
+            font-size: 24px;
+            margin-top: 10px;
+        }
+
+        .down-text {
+            font-size: 20px;
+            margin-top: 5px;
+        }
+
+        /* Logo image styling */
+        .top-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 20px 0;
+        }
+
+        /* Button styling */
+        .button {
+            width: 200px;
+            height: 50px;
+            border-radius: 25px;
+            font-size: large;
+            font-weight: bold;
+            background-color: #e28710;
+            color: black;
+            border: none;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: white;
+            color: #e28710;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header text -->
+    <div class="headers">CHIM-SHIELD</div>
+
+    <!-- Logo -->
+    <img src="C:/Users/MTENJE/Desktop/Pins/logo.jpg" alt="Logo" class="top-image">
+
+    <!-- Subtitle -->
+    <div class="in-text">STAY PROTECTED AT ALL TIMES</div>
+    <div class="down-text">BOOK US FOR ANY EVENT</div>
+
+    <!-- Call-to-action button -->
+    <a href="sign_up.html">
+        <button class="button">Get started</button>
+    </a>
+</body>
+</html>

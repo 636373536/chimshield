@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>admin-panel</title>
+    <link rel="icon"type="image/png" href="https://i.postimg.cc/T2kMz4kS/logo.jpg">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        stats-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .stats-value {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .stats-label {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .active-users {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+        
+        .user-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #2ecc71;
+            margin-right: 5px;
+        }
+        
+        .chat-window {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            height: 400px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+        }
+        
+        .chat-header {
+            background: #2c3e50;
+            color: white;
+            padding: 10px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+        }
+        
+        .chat-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .chat-input button {
+            margin-left: 5px;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background: #3498db;
+            color: white;
+        }
+        
+        .message {
+            max-width: 80%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .received {
+            background: #f1f1f1;
+            align-self: flex-start;
+        }
+        
+        .sent {
+            background: #3498db;
+            color: white;
+            align-self: flex-end;
+        }
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 250px;
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 20px;
+        }
+        
+        .timeline {
+            margin-bottom: 30px;
+        }
+        
+        .timeline h2 {
+            color: #ecf0f1;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .timeline ul {
+            list-style: none;
+        }
+        
+        .timeline li {
+            padding: 10px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .timeline li:hover {
+            color: #3498db;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .date-display {
+            font-size: 16px;
+            color: #7f8c8d;
+        }
+        
+        .search-container {
+            display: flex;
+            flex-grow: 1;
+            margin: 0 20px;
+            gap: 10px;
+            max-width: 600px; /* Make search area longer */
+        }
+        
+        .search-bar {
+            flex: 1;
+            position: relative;
+        }
+        
+        .search-bar input,
+        #searchInput {
+            width: 350px; /* Make input longer */
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 60px; /* 60px border radius */
+            outline: none;
+        }
+        
+        .search-type {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .search-type button {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            background-color: white;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+        
+        .search-type button.active {
+            background-color: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+        
+        .search-btn {
+            padding: 8px 15px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+        
+        .logout-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background-color: #c0392b;
+        }
+        
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card h3 {
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        
+        .team-table {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .team-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+        
+        .team-actions h3 {
+            margin: 0;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .btn-primary {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-success {
+            background-color: #2ecc71;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #27ae60;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            width: 600px;
+            max-width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-header h3 {
+            margin: 0;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #7f8c8d;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .member-list {
+            margin-top: 20px;
+        }
+        
+        .member-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .member-actions {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+        
+        .btn-danger {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        
+        .add-member-btn {
+            margin-top: 10px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="timeline">
+                <h2>TIMELINE</h2>
+                <ul>
+                    <li>2025</li>
+                    <li>2026</li>
+                    <li>2027</li>
+                    <li>2028</li>
+                </ul>
+            </div>
+            
+<div class="timeline">
+  <h2>COMMUNICATION</h2>
+  <ul>
+    <li id="viewMessagesBtn">Messages</li>
+    <li id="viewCallsBtn">Call Logs</li>
+  </ul>
+</div>
+        </div>
+        
+        <div class="main-content">
+            <div class="header">
+                <div class="date-display" id="currentDate"></div>
+                <div class="search-container">
+                    <input type="text" placeholder="Search..." id="searchInput">
+                    <button class="search-btn" id="searchBtn">Search</button>
+                </div>
+                <a href="./trial.html"  class="logout-btn" id="logoutBtn">Logout</a>
+            </div>
+            
+            <div class="dashboard-cards">
+                <div class="stats-card">
+                    <div class="stats-label">Active Users</div>
+                    <div class="stats-value" id="activeUsersCount">0</div>
+                    <div class="active-users">
+                        <div class="user-indicator"></div>
+                        <span id="activeUsersText">0 users online</span>
+                    </div>
+                </div>
+                
+                <div class="stats-card">
+                    <div class="stats-label">Total Revenue</div>
+                    <div class="stats-value" id="totalRevenue">K0</div>
+                    <div class="stats-label">This month</div>
+                </div>
+                
+                <div class="stats-card">
+                    <div class="stats-label">New Bookings</div>
+                    <div class="stats-value" id="newBookings">0</div>
+                    <div class="stats-label">Today</div>
+                </div>
+            </div>
+            
+            <div class="team-table">
+                <div class="team-actions">
+                    <h3>Active Teams</h3>
+                    <div class="action-buttons">
+                        <button class="btn btn-primary" id="addTeamBtn">Add Team</button>
+                    </div>
+                </div>
+                
+                <table id="teamsTable">
+                    <thead>
+                        <tr>
+                            <th>Team Name</th>
+                            <th>Type</th>
+                            <th>Leader</th>
+                            <th>Members</th>
+                            <th>Price</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="teamsTableBody">
+                        <!-- Teams will be added dynamically -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="team-table" style="margin-top: 30px;">
+                <div class="team-actions">
+                    <h3>Recent Bookings</h3>
+                </div>
+                <table id="bookingsTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Team</th>
+                            <th>User</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bookingsTableBody">
+                        <!-- Bookings will be added dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Team Modal -->
+    <div class="modal" id="addTeamModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Team</h3>
+                <button class="close-btn" id="closeAddModal">&times;</button>
+            </div>
+            <form id="teamForm">
+                <div class="form-group">
+                    <label for="teamName">Team Name *</label>
+                    <input type="text" id="teamName" required>
+                </div>
+                <div class="form-group">
+                    <label for="teamType">Type *</label>
+                    <input type="text" id="teamType" required>
+                </div>
+                <div class="form-group">
+                    <label for="teamLocation">Location *</label>
+                    <input type="text" id="teamLocation" required>
+                </div>
+                <div class="form-group">
+                    <label for="teamPrice">Price *</label>
+                    <input type="number" id="teamPrice" required min="0">
+                </div>
+                <div class="form-group">
+                    <label for="teamLeader">Team Leader *</label>
+                    <input type="text" id="teamLeader" required>
+                </div>
+                <div class="form-group">
+                    <label for="teamDescription">Description</label>
+                    <textarea id="teamDescription"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="teamRating">Initial Rating</label>
+                    <select id="teamRating">
+                        <option value="5">5 - Excellent</option>
+                        <option value="4">4 - Good</option>
+                        <option value="3" selected>3 - Average</option>
+                        <option value="2">2 - Below Average</option>
+                        <option value="1">1 - Poor</option>
+                    </select>
+                </div>
+                
+                <div class="member-list" id="memberList">
+                    <h4>Team Members *</h4>
+                    <div class="member-item">
+                        <input type="text" placeholder="Member name" class="member-name" required>
+                        <div class="member-actions">
+                            <button type="button" class="btn btn-danger btn-sm remove-member">Remove</button>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="add-member-btn" id="addMemberBtn">+ Add Member</button>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn" id="cancelAddBtn">Cancel</button>
+                    <button type="submit" class="btn btn-success">Add Team</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- View Team Modal -->
+    <div class="modal" id="viewTeamModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="viewTeamTitle">Team Details</h3>
+                <button class="close-btn" id="closeViewModal">&times;</button>
+            </div>
+            <div id="teamDetails">
+                <p><strong>Team Name:</strong> <span id="viewTeamName"></span></p>
+                <p><strong>Team Leader:</strong> <span id="viewTeamLeader"></span></p>
+                <p><strong>Rating:</strong> <span id="viewTeamRating"></span>/5</p>
+                <p><strong>Description:</strong> <span id="viewTeamDescription"></span></p>
+                
+                <div class="member-list">
+                    <h4>Team Members</h4>
+                    <div id="viewTeamMembers">
+                        <!-- Members will be added dynamically -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" id="closeViewBtn">Close</button>
+            </div>
+        </div>
+    </div>
+     
+<!-- Messages Modal -->
+<div class="modal" id="messagesModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Customer Messages</h3>
+      <button class="close-btn" id="closeMessagesModal">&times;</button>
+    </div>
+    <div class="message-list">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Message</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="messagesTableBody">
+          <!-- Messages will be added dynamically -->
+        </tbody>
+      </table>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn" id="closeMessagesBtn">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Calls Modal -->
+<div class="modal" id="callsModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Call Logs</h3>
+      <button class="close-btn" id="closeCallsModal">&times;</button>
+    </div>
+    <div class="call-list">
+      <table>
+        <thead>
+          <tr>
+            <th>Number</th>
+            <th>Duration</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="callsTableBody">
+          <!-- Calls will be added dynamically -->
+        </tbody>
+      </table>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn" id="closeCallsBtn">Close</button>
+    </div>
+  </div>
+</div>
+    <!-- Add this chat window just before the closing </body> tag -->
+    <div class="chat-window" id="adminChatWindow" style="display:none;">
+        <div class="chat-header">
+            <span id="chatWithUser"></span>
+            <button class="close-btn" id="closeChatBtn">&times;</button>
+        </div>
+        <div class="chat-messages" id="adminChatMessages"></div>
+        <div class="chat-input">
+            <input type="text" id="adminChatInput" placeholder="Type a message...">
+            <button id="adminSendBtn">Send</button>
+        </div>
+    </div>
+    <script>
+           // WebSocket connection
+           const adminSocket = new WebSocket('ws://localhost:3000/admin');
+        
+        // Store active conversations
+        let activeConversations = {};
+        let currentConversation = null;
+        
+        // DOM Elements
+        const activeUsersCount = document.getElementById('activeUsersCount');
+        const activeUsersText = document.getElementById('activeUsersText');
+        const totalRevenue = document.getElementById('totalRevenue');
+        const newBookings = document.getElementById('newBookings');
+        const logoutBtn = document.getElementById('logoutBtn');
+        
+        // Set current date
+        document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+        
+        // Connection opened
+        adminSocket.addEventListener('open', (event) => {
+            console.log('Admin connected to WebSocket server');
+        });
+        
+        // Listen for messages
+        adminSocket.addEventListener('message', (event) => {
+            const data = JSON.parse(event.data);
+            
+            if (data.type === 'init-data') {
+                updateDashboard(data);
+            } else if (data.type === 'user-connected' || data.type === 'user-disconnected') {
+                updateUserCount(data.count);
+            } else if (data.type === 'new-message') {
+                handleNewMessage(data);
+            }
+        });
+        
+        function updateDashboard(data) {
+            activeUsersCount.textContent = data.activeUsers;
+            activeUsersText.textContent = `${data.activeUsers} user${data.activeUsers !== 1 ? 's' : ''} online`;
+            totalRevenue.textContent = `K${data.revenue.toLocaleString()}`;
+            newBookings.textContent = data.bookings;
+            
+            // Load teams
+            fetchTeams();
+            
+            // Load bookings
+            fetchBookings();
+        }
+        
+        function updateUserCount(count) {
+            activeUsersCount.textContent = count;
+            activeUsersText.textContent = `${count} user${count !== 1 ? 's' : ''} online`;
+        }
+        
+        function fetchTeams() {
+            fetch('/api/teams')
+                .then(response => response.json())
+                .then(teams => {
+                    loadedTeams = teams;
+                    renderTeams(teams);
+                });
+        }
+        
+        function fetchBookings() {
+            fetch('/api/bookings')
+                .then(response => response.json())
+                .then(bookings => {
+                    loadedBookings = bookings;
+                    renderBookings(bookings);
+                });
+        }
+        
+        function renderTeams(teams) {
+            const tableBody = document.getElementById('teamsTableBody');
+            tableBody.innerHTML = '';
+            
+            teams.forEach(team => {
+                const row = tableBody.insertRow();
+                row.innerHTML = `
+                    <td>${team.name}</td>
+                    <td>${team.type}</td>
+                    <td>${team.leader}</td>
+                    <td>${team.members.length}</td>
+                    <td>K${team.price.toLocaleString()}</td>
+                    <td>
+                        <button class="btn btn-primary view-team-btn" data-id="${team.id}">View</button>
+                        <button class="btn btn-danger delete-team-btn" data-id="${team.id}">Delete</button>
+                    </td>
+                `;
+            });
+        }
+        
+        function renderBookings(bookings) {
+            const tableBody = document.getElementById('bookingsTableBody');
+            tableBody.innerHTML = '';
+            
+            bookings.forEach(booking => {
+                const row = tableBody.insertRow();
+                row.innerHTML = `
+                    <td>${booking.id}</td>
+                    <td>${booking.teamId}</td>
+                    <td>${booking.userId}</td>
+                    <td>${new Date(booking.date).toLocaleDateString()}</td>
+                    <td>K${booking.amount.toLocaleString()}</td>
+                    <td>${booking.status}</td>
+                `;
+            });
+        }
+        
+        function handleNewMessage(message) {
+            if (!activeConversations[message.userId]) {
+                activeConversations[message.userId] = {
+                    userId: message.userId,
+                    messages: []
+                };
+            }
+            
+            activeConversations[message.userId].messages.push(message);
+            
+            if (currentConversation === message.userId) {
+                displayMessage(message);
+            } else {
+                // Show notification
+                showNotification(`New message from user ${message.userId}`);
+            }
+        }
+        
+        // Logout
+        logoutBtn.addEventListener('click', () => {
+            localStorage.removeItem('token');
+            window.location.href = '/';
+        });
+        // Add this to your admin.html script section
+document.addEventListener('DOMContentLoaded', function() {
+    // Add Team Modal Handling
+    const addTeamBtn = document.getElementById('addTeamBtn');
+    const addTeamModal = document.getElementById('addTeamModal');
+    const closeAddModal = document.getElementById('closeAddModal');
+    const cancelAddBtn = document.getElementById('cancelAddBtn');
+    const teamForm = document.getElementById('teamForm');
+    
+    // Show modal
+    addTeamBtn.addEventListener('click', () => {
+        addTeamModal.style.display = 'flex';
+    });
+    
+    // Hide modal
+    closeAddModal.addEventListener('click', () => {
+        addTeamModal.style.display = 'none';
+    });
+    
+    cancelAddBtn.addEventListener('click', () => {
+        addTeamModal.style.display = 'none';
+    });
+    
+    // Form submission
+    teamForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const formData = {
+            name: document.getElementById('teamName').value,
+            type: document.getElementById('teamType').value,
+            location: document.getElementById('teamLocation').value,
+            price: parseFloat(document.getElementById('teamPrice').value),
+            leader: document.getElementById('teamLeader').value,
+            description: document.getElementById('teamDescription').value,
+            members: Array.from(document.querySelectorAll('.member-name'))
+                      .map(input => input.value)
+                      .filter(name => name.trim() !== '')
+        };
+        
+        try {
+            const response = await fetch('/api/teams', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify(formData)
+            });
+            
+            if (!response.ok) throw new Error('Failed to add team');
+            
+            const newTeam = await response.json();
+            fetchTeams(); // Refresh the team list
+            addTeamModal.style.display = 'none';
+            teamForm.reset();
+            alert('Team added successfully!');
+        } catch (error) {
+            console.error('Error adding team:', error);
+            alert('Failed to add team: ' + error.message);
+        }
+    });
+    
+    // Add member field functionality
+    const addMemberBtn = document.getElementById('addMemberBtn');
+    const memberList = document.getElementById('memberList');
+    
+    addMemberBtn.addEventListener('click', () => {
+        const memberItem = document.createElement('div');
+        memberItem.className = 'member-item';
+        memberItem.innerHTML = `
+            <input type="text" placeholder="Member name" class="member-name" required>
+            <div class="member-actions">
+                <button type="button" class="btn btn-danger btn-sm remove-member">Remove</button>
+            </div>
+        `;
+        memberList.appendChild(memberItem);
+        
+        // Add remove functionality
+        memberItem.querySelector('.remove-member').addEventListener('click', () => {
+            if (memberList.children.length > 1) {
+                memberList.removeChild(memberItem);
+            }
+        });
+    });
+});
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = '/';
+            }
+        });
+
+    // Add this after renderTeams function
+    document.addEventListener('DOMContentLoaded', function() {
+        // ...existing code...
+
+        // View Team Modal logic
+        document.getElementById('teamsTableBody').addEventListener('click', function(e) {
+            if (e.target.classList.contains('view-team-btn')) {
+                const teamId = e.target.getAttribute('data-id');
+                fetch(`/api/teams/${teamId}`)
+                    .then(res => res.json())
+                    .then(team => {
+                        document.getElementById('viewTeamName').textContent = team.name;
+                        document.getElementById('viewTeamLeader').textContent = team.leader;
+                        document.getElementById('viewTeamRating').textContent = team.rating || '';
+                        document.getElementById('viewTeamDescription').textContent = team.description || '';
+                        const membersDiv = document.getElementById('viewTeamMembers');
+                        membersDiv.innerHTML = '';
+                        (team.members || []).forEach(member => {
+                            const div = document.createElement('div');
+                            div.textContent = member;
+                            membersDiv.appendChild(div);
+                        });
+                        document.getElementById('viewTeamModal').style.display = 'flex';
+                    });
+            }
+        });
+
+        // Close View Team Modal
+        document.getElementById('closeViewModal').onclick =
+        document.getElementById('closeViewBtn').onclick = function() {
+            document.getElementById('viewTeamModal').style.display = 'none';
+        };
+
+        // ...existing code for Add Team Modal...
+    });
+        // Add this function to show the chat window with a user
+        function openChatWithUser(userId) {
+            currentConversation = userId;
+            document.getElementById('adminChatWindow').style.display = 'flex';
+            document.getElementById('chatWithUser').textContent = 'Chat with ' + userId;
+            renderAdminChatMessages();
+        }
+
+        // Render messages in the chat window
+        function renderAdminChatMessages() {
+            const chatMessages = document.getElementById('adminChatMessages');
+            chatMessages.innerHTML = '';
+            if (activeConversations[currentConversation]) {
+                activeConversations[currentConversation].messages.forEach(msg => {
+                    const div = document.createElement('div');
+                    div.className = 'message ' + (msg.sender === 'admin' ? 'sent' : 'received');
+                    div.innerHTML = `<div>${msg.content}</div>
+                        <span class="time">${new Date(msg.timestamp).toLocaleTimeString()}</span>`;
+                    chatMessages.appendChild(div);
+                });
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        }
+
+        // Handle incoming user messages
+        function handleNewMessage(message) {
+            if (!activeConversations[message.userId]) {
+                activeConversations[message.userId] = {
+                    userId: message.userId,
+                    messages: []
+                };
+            }
+            activeConversations[message.userId].messages.push(message);
+
+            // If not already chatting, open chat window
+            if (!currentConversation) {
+                openChatWithUser(message.userId);
+            } else if (currentConversation === message.userId) {
+                renderAdminChatMessages();
+            } else {
+                // Optionally show notification for other users
+                showNotification(`New message from user ${message.userId}`);
+            }
+        }
+
+        // Send message as admin
+        document.getElementById('adminSendBtn').onclick = function() {
+            const input = document.getElementById('adminChatInput');
+            const text = input.value.trim();
+            if (text && currentConversation) {
+                const msg = {
+                    type: 'message',
+                    content: text,
+                    userId: currentConversation,
+                    sender: 'admin',
+                    timestamp: new Date().toISOString()
+                };
+                adminSocket.send(JSON.stringify(msg));
+                // Add to local conversation
+                if (!activeConversations[currentConversation]) {
+                    activeConversations[currentConversation] = { userId: currentConversation, messages: [] };
+                }
+                activeConversations[currentConversation].messages.push(msg);
+                renderAdminChatMessages();
+                input.value = '';
+            }
+        };
+
+        // Close chat window
+        document.getElementById('closeChatBtn').onclick = function() {
+            document.getElementById('adminChatWindow').style.display = 'none';
+            currentConversation = null;
+        };
+
+        // Optionally, click on notification to open chat with user
+        function showNotification(text) {
+            // Simple alert for now, you can improve this
+            alert(text);
+        }
+    </script>
+<!-- ...existing code... -->
+<script>
+    // ...existing code...
+
+    // Store all messages and calls
+    let allMessages = [];
+    let allCalls = [];
+    let usersMap = {}; // userId -> {name, email}
+
+    // Listen for messages and calls from WebSocket
+    adminSocket.addEventListener('message', (event) => {
+        const data = JSON.parse(event.data);
+
+        if (data.type === 'init-data') {
+            updateDashboard(data);
+        } else if (data.type === 'user-connected' || data.type === 'user-disconnected') {
+            updateUserCount(data.count);
+        } else if (data.type === 'new-message') {
+            handleNewMessage(data);
+            // Store for modal
+            allMessages.push(data);
+            // Optionally update usersMap if data contains user info
+            if (data.userName || data.userEmail) {
+                usersMap[data.userId] = { name: data.userName, email: data.userEmail };
+            }
+            renderMessagesTable();
+        } else if (data.type === 'call') {
+            handleIncomingCall(data);
+            allCalls.push(data);
+            renderCallsTable();
+        }
+    });
+
+    // --- MESSAGES MODAL LOGIC ---
+
+    // Open Messages Modal
+    document.getElementById('viewMessagesBtn').onclick = function() {
+        renderMessagesTable();
+        document.getElementById('messagesModal').style.display = 'flex';
+    };
+    document.getElementById('closeMessagesModal').onclick =
+    document.getElementById('closeMessagesBtn').onclick = function() {
+        document.getElementById('messagesModal').style.display = 'none';
+    };
+
+    // Render messages grouped by user
+    function renderMessagesTable() {
+        const tbody = document.getElementById('messagesTableBody');
+        tbody.innerHTML = '';
+        // Group messages by userId, show only latest message per user
+        const grouped = {};
+        allMessages.forEach(msg => {
+            grouped[msg.userId] = msg;
+        });
+        Object.values(grouped).forEach(msg => {
+            const tr = document.createElement('tr');
+            tr.className = 'user-message-row';
+            tr.setAttribute('data-userid', msg.userId);
+            tr.innerHTML = `
+                <td>${usersMap[msg.userId]?.name || msg.userId}</td>
+                <td>${usersMap[msg.userId]?.email || ''}</td>
+                <td>${msg.content}</td>
+                <td>${new Date(msg.timestamp).toLocaleString()}</td>
+                <td>${msg.status || ''}</td>
+                <td><button class="btn btn-primary btn-sm reply-btn" data-userid="${msg.userId}">Reply</button></td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    // Click on message row or reply button to open chat
+    document.getElementById('messagesTableBody').onclick = function(e) {
+        let tr = e.target.closest('tr.user-message-row');
+        if (tr) {
+            const userId = tr.getAttribute('data-userid');
+            openChatWithUser(userId);
+            document.getElementById('adminChatWindow').style.display = 'flex';
+        }
+    };
+
+    // --- CALLS MODAL LOGIC ---
+
+    document.getElementById('viewCallsBtn').onclick = function() {
+        renderCallsTable();
+        document.getElementById('callsModal').style.display = 'flex';
+    };
+    document.getElementById('closeCallsModal').onclick =
+    document.getElementById('closeCallsBtn').onclick = function() {
+        document.getElementById('callsModal').style.display = 'none';
+    };
+
+    function renderCallsTable() {
+        const tbody = document.getElementById('callsTableBody');
+        tbody.innerHTML = '';
+        allCalls.forEach(call => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${usersMap[call.userId]?.name || call.userId}</td>
+                <td>${call.duration || '-'}</td>
+                <td>${call.timestamp ? new Date(call.timestamp).toLocaleString() : ''}</td>
+                <td>${call.status || (call.accepted ? 'Accepted' : 'Missed')}</td>
+                <td></td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    // --- INCOMING CALL HANDLING ---
+
+    function handleIncomingCall(callData) {
+        // Show notification for incoming call
+        alert(`Incoming ${callData.callType} call from ${usersMap[callData.userId]?.name || callData.userId}`);
+        // Optionally, you can show a modal or UI for accepting/rejecting the call
+        // and log the call to allCalls array for call logs
+    }
+
+    // --- CHAT WINDOW LOGIC (already present, just update user name display) ---
+
+    function openChatWithUser(userId) {
+        currentConversation = userId;
+        document.getElementById('adminChatWindow').style.display = 'flex';
+        document.getElementById('chatWithUser').textContent = 'Chat with ' + (usersMap[userId]?.name || userId);
+        renderAdminChatMessages();
+    }
+
+    // ...existing code for chat window, renderAdminChatMessages, handleNewMessage, etc...
+
+    // Optionally, update usersMap when fetching users from backend if available
+
+    // ...existing code...
+</script>
+<!-- ...existing code... -->
+<script>
+    // ...existing code...
+
+    // Store loaded teams and bookings for searching
+    let loadedTeams = [];
+    let loadedBookings = [];
+
+    function fetchTeams() {
+        fetch('/api/teams')
+            .then(response => response.json())
+            .then(teams => {
+                loadedTeams = teams;
+                renderTeams(teams);
+            });
+    }
+
+    function fetchBookings() {
+        fetch('/api/bookings')
+            .then(response => response.json())
+            .then(bookings => {
+                loadedBookings = bookings;
+                renderBookings(bookings);
+            });
+    }
+
+    // ...existing code...
+
+    // SEARCH FUNCTIONALITY
+    document.getElementById('searchBtn').addEventListener('click', function() {
+        const query = document.getElementById('searchInput').value.trim().toLowerCase();
+
+        // Filter teams by name or member name
+        const filteredTeams = loadedTeams.filter(team =>
+            team.name.toLowerCase().includes(query) ||
+            (team.members && team.members.some(m => m.toLowerCase().includes(query)))
+        );
+        renderTeams(filteredTeams);
+
+        // Filter bookings by booking id (as string) or team name
+        const filteredBookings = loadedBookings.filter(booking =>
+            booking.id.toString().toLowerCase().includes(query) ||
+            (loadedTeams.find(t => t.id === booking.teamId)?.name?.toLowerCase().includes(query))
+        );
+        renderBookings(filteredBookings);
+    });
+
+    // Optional: Reset search on input clear
+    document.getElementById('searchInput').addEventListener('input', function(e) {
+        if (!e.target.value.trim()) {
+            renderTeams(loadedTeams);
+            renderBookings(loadedBookings);
+        }
+    });
+
+    // ...existing code...
+</script>
+</body>
+</html>
